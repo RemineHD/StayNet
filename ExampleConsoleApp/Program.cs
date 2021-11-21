@@ -1,16 +1,14 @@
 ﻿
 global using System;
+using ExampleConsoleApp;
 using StayNet;
 using StayNet.Server.Controllers;
 
-StayNetServer server = new StayNetServer(new StayNetServerConfiguration
-{
-    Host = "hey!",
-    Port = 8080,
-});
+Console.WriteLine("Hello World!");
+SimpleServerExample.Run();
+/*
+ *
+ * THIS PROGRAM DOESNT REALLY DO ANYTHING. BUT YOU CAN CHECK THE EXAMPLES. 
+ * 
+*/
 
-server.RegisterController<Test>();
-public class Test : BaseController
-{
-    
-}
