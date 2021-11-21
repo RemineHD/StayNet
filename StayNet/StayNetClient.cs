@@ -1,6 +1,6 @@
 ﻿namespace StayNet
 {
-    public class StayNetClient
+    public sealed class StayNetClient
     {
         
     }
