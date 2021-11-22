@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -118,7 +119,8 @@ namespace StayNet
         {
             // we create a new client
             Client c = new Client(client, this);
-            
+            c.TcpClient.ReceiveBufferSize = 8192;
+            c.TcpClient.SendBufferSize = 8192;
             Log(LogLevel.Info, $"Client connected [{c.Id}]");
             Log(LogLevel.Debug, $"[C{c.Id}] Waiting initial message");
             
@@ -134,7 +136,6 @@ namespace StayNet
             }
             
             Log(LogLevel.Debug, $"[C{c.Id}] Initial message received");
-            await c.TcpClient.GetStream().WriteAsync(new byte[] {1});
             try
             {
                 // we raise the ClientConnecting event
@@ -145,10 +146,11 @@ namespace StayNet
                 if (eresult.IsCanceled)
                 {
                     Log(LogLevel.Debug, $"[C{c.Id}] Client connection canceled");
+                    await c.TcpClient.GetStream().WriteAsync(new byte[] {0});
                     c.Close();
                     return;
                 }
-                
+                await c.TcpClient.GetStream().WriteAsync(new byte[] {1});
                 // if the event was not canceled, we add the client to the list of connected clients
                 m_clients.Add(c.Id, c);
                 // and we raise the ClientConnected event
@@ -176,6 +178,41 @@ namespace StayNet
         public void Dispose()
         {
             //Listener.Stop();
+        }
+
+        public void Stop()
+        {
+            //disconnect all clients
+            foreach (var client in m_clients.Values)
+            {
+                client.Disconnect();
+            }
+            
+            //stop listening for new clients
+            m_listener.Stop();
+            
+            //cancel all pending tasks
+            m_cancellation.Cancel();
+            
+            Log(LogLevel.Info, "Server stopped");
+        }
+        
+        public List<Client> GetClients()
+        {
+            return m_clients.Values.ToList();
+        }
+        
+        public Client GetClient(int id)
+        {
+            return m_clients.ContainsKey(id) ? m_clients[id] : null;
+        }
+        
+        public async Task BroadcastInvoke(string method, params object[] args)
+        {
+            foreach (var client in m_clients.Values)
+            {
+                await client.InvokeAsync(method, args);
+            }
         }
 
         #endregion

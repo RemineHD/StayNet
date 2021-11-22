@@ -58,6 +58,8 @@ namespace StayNet
             {
                 Log(LogLevel.Info, "Connecting");
                 TcpClient = new TcpClient();
+                TcpClient.ReceiveBufferSize = 8192;
+                TcpClient.SendBufferSize = 8192;
                 await TcpClient.ConnectAsync(EndPoint);
                 byte[] addedData = new byte[data.Length + 1];
                 addedData[0] = (byte) BasePacketTypes.InitialMessage;
@@ -86,8 +88,11 @@ namespace StayNet
 
                     if (buffer[0] == 1)
                     {
-                        Log(LogLevel.Info, "Connection successful");
-
+                        Log(LogLevel.Info, $"Connection successful");
+                        while (true)
+                        {
+    
+                        }
                     }
                     else
                     {
@@ -120,6 +125,12 @@ namespace StayNet
         {
             TcpClient.Close();
             IsConnected = false;
+        }
+
+        public void Disconnect()
+        {
+            Close();
+            Log(LogLevel.Info, "Disconnected");
         }
         
     }

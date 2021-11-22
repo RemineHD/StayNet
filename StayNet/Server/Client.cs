@@ -15,7 +15,8 @@ namespace StayNet.Server
         
         internal TcpClient TcpClient;
         public StayNetServer Server { get; internal set; }
-        
+        internal byte[] Buffer;
+        internal CancellationTokenSource CancellationTokenSource;
         internal Client(TcpClient tcpclient, StayNetServer server)
         {
             this.TcpClient = tcpclient;
@@ -69,14 +70,80 @@ namespace StayNet.Server
         
         internal async Task EndInitialization()
         {
-            //TODO: Implement this
-            throw new NotImplementedException();
+            CancellationTokenSource = new CancellationTokenSource();
+            Buffer = new byte[TcpClient.ReceiveBufferSize];
+            TcpClient.GetStream().BeginRead(Buffer, 0, TcpClient.ReceiveBufferSize, __read, null);
+        }
+
+        internal void __read(IAsyncResult result)
+        {
+            try
+            {
+                int _readLength = TcpClient.GetStream().EndRead(result);
+                byte[] _data = new byte[_readLength];
+                Buffer.CopyTo(_data, 0);
+                if (_readLength == 0)
+                {
+                    this.Server.Log(LogLevel.Info, $"Client {this.Id} disconnected");
+                    this.Disconnect();
+                    return;
+                }
+
+                Buffer = new byte[TcpClient.ReceiveBufferSize];
+                TcpClient.GetStream().BeginRead(Buffer, 0, TcpClient.ReceiveBufferSize, __read, null);
+            }catch(Exception e)
+            {
+                this.Server.Log(LogLevel.Info, $"Client {this.Id} disconnected");
+                this.Disconnect();
+            }
         }
 
         internal void Close()
         {
             TcpClient.Close();
         }
+        
+        public void Disconnect()
+        {
+            this.Server.m_clients.Remove(this.Id);
+            this.Close();
+        }
+        
+        public async Task InvokeAsync(String Message, params object[] args)
+        {
+            
+        }
+
+        public async Task<String> RequestString(String MId, params object[] args)
+        {
+            return String.Empty;
+        }
+        
+        public async Task<int> RequestInt(String MId, params object[] args)
+        {
+            return 0;
+        }
+        
+        public async Task<bool> RequestBool(String MId, params object[] args)
+        {
+            return false;
+        }
+        
+        public async Task<float> RequestFloat(String MId, params object[] args)
+        {
+            return 0;
+        }
+        
+        public async Task<long> RequestLong(String MId, params object[] args)
+        {
+            return 0;
+        }
+        
+        public async Task<byte[]> RequestBytes(String MId, params object[] args)
+        {
+            return new byte[0];
+        }
+        
         
     }
 }

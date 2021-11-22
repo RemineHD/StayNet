@@ -22,6 +22,16 @@ namespace ExampleConsoleApp
             var server = new StayNetServer(config);
             
             server.Start();
+
+            server.ClientConnecting += (server, ev) =>
+            {
+                if (ev.ConnectionData.ReadString() != "CARA RANA")
+                {
+                    Console.WriteLine("UNAUTHORIZED");
+                    ev.Cancel();
+                }
+            };
+            
             new Thread(() =>
             {
                 while (true)
