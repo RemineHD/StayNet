@@ -2,9 +2,9 @@
 
 namespace StayNet.Server.Events
 {
-    public class ClientConnectedEvent : ServerNetEvent
+    public class ClientConnectingEvent : ServerNetEvent
     {
-        public ClientConnectedEvent(Client client, ClientConnectionData connectionData)
+        public ClientConnectingEvent(Client client, ClientConnectionData connectionData)
         {
             Client = client;
             ConnectionData = connectionData;

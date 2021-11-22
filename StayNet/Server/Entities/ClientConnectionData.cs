@@ -5,7 +5,8 @@ namespace StayNet.Server.Entities
 {
     public sealed class ClientConnectionData
     {
-        public MemoryStream Stream { get; private set; }
+
+        public MemoryStream Stream { get; internal set; }
         
         public void Read(byte[] buffer, int offset, int count)
         {
