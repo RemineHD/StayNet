@@ -1,0 +1,2 @@
+public class StayNetServer {
+}
