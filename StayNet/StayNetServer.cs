@@ -189,7 +189,7 @@ namespace StayNet
             }
             
             //stop listening for new clients
-            m_listener.Stop();test
+            m_listener.Stop();
             
             //cancel all pending tasks
             m_cancellation.Cancel();
