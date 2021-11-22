@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using StayNet.Common.Enums;
 using StayNet.Server.Entities;
-using StayNet.Server.Enums;
 
 namespace StayNet.Server
 {
@@ -38,7 +38,7 @@ namespace StayNet.Server
             {
                 await Task.Delay(50);
             }
-            var data = new byte[stream.Length];
+            var data = new byte[TcpClient.Available];
             await stream.ReadAsync(data, 0, data.Length);
             var connectionData = new ClientConnectionData();
             var id = data[0];

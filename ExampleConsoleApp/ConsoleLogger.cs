@@ -1,6 +1,6 @@
 ﻿using StayNet;
-using StayNet.Server.Enums;
-using StayNet.Server.Interfaces;
+using StayNet.Common.Enums;
+using StayNet.Common.Interfaces;
 
 namespace ExampleConsoleApp
 {
@@ -9,7 +9,13 @@ namespace ExampleConsoleApp
         public void Log(string message, LogLevel level, StayNetServer Server)
         {
             //write message to console including the loglevel
-            Console.WriteLine($"{level} - {message}");
+            Console.WriteLine($"SERVER {level} - {message}");
+        }
+        
+        public void Log(string message, LogLevel level, StayNetClient Client)
+        {
+            //write message to console including the loglevel
+            Console.WriteLine($"CLIENT {level} - {message}");
         }
     }
 }

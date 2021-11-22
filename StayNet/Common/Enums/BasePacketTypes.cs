@@ -1,4 +1,4 @@
-﻿namespace StayNet.Server.Enums
+﻿namespace StayNet.Common.Enums
 {
     public enum BasePacketTypes
     {

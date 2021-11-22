@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <Folder Include="Server\Attributes" />
+      <Folder Include="Server\Enums" />
+      <Folder Include="Server\Interfaces" />
     </ItemGroup>
 
 </Project>

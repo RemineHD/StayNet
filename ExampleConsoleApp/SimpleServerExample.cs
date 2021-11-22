@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading;
 using StayNet;
-using StayNet.Server.Enums;
+using StayNet.Common.Enums;
 
 namespace ExampleConsoleApp
 {
@@ -29,6 +29,7 @@ namespace ExampleConsoleApp
                     Thread.Sleep(1000);
                 }
             }).Start();
+
         }
         
     }

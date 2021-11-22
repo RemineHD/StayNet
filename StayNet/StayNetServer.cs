@@ -4,13 +4,13 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using StayNet.Common.Enums;
+using StayNet.Common.Interfaces;
 using StayNet.Server;
 using StayNet.Server.Controllers;
 using StayNet.Server.Entities;
-using StayNet.Server.Enums;
 using StayNet.Server.Events;
 using StayNet.Server.Exceptions;
-using StayNet.Server.Interfaces;
 
 namespace StayNet
 {
@@ -46,8 +46,8 @@ namespace StayNet
         internal TcpListener m_listener;
 
         internal CancellationTokenSource m_cancellation;
-        
-        internal Dictionary<int, Client> m_clients;
+
+        internal Dictionary<int, Client> m_clients = new();
         
         internal void Log(LogLevel level, string message)
         {
@@ -134,7 +134,7 @@ namespace StayNet
             }
             
             Log(LogLevel.Debug, $"[C{c.Id}] Initial message received");
-
+            await c.TcpClient.GetStream().WriteAsync(new byte[] {1});
             try
             {
                 // we raise the ClientConnecting event
