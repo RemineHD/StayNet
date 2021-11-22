@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using StayNet.Common.Enums;
 using StayNet.Server.Entities;
+using StayNet.Server.Events;
 
 namespace StayNet.Server
 {
@@ -106,6 +107,7 @@ namespace StayNet.Server
         public void Disconnect()
         {
             this.Server.m_clients.Remove(this.Id);
+            this.Server.CDisconnect(this);
             this.Close();
         }
         
