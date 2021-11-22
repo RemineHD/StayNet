@@ -30,7 +30,7 @@ namespace StayNet
         #region Events
         
         public event EventHandler<Client> ClientConnected;
-        public event EventHandler<ClientDisconnectedEvent> ClientDisconnected;
+        public event EventHandler<Client> ClientDisconnected;
         public event EventHandler<ClientConnectingEvent> ClientConnecting;
 
         #endregion
@@ -44,6 +44,8 @@ namespace StayNet
 
         #region Internal
 
+        internal ControllerManager m_controllerManager;
+        
         internal TcpListener m_listener;
 
         internal CancellationTokenSource m_cancellation;
@@ -63,6 +65,7 @@ namespace StayNet
         public StayNetServer(StayNetServerConfiguration configuration)
         {
             this.Configuration = configuration;
+            m_controllerManager = new ControllerManager();
         }
 
         #region Methods
@@ -168,11 +171,20 @@ namespace StayNet
 
         public void RegisterController<T>()  where T : BaseController
         {
+            if (IsRunning)
+            {
+                throw new ServerStateException("Cannot register controller while the server is running.", this);
+            }
+            m_controllerManager.RegisterController<T>();
         }
 
         public void RegisterControllers(Assembly assembly)
         {
-            
+            if (IsRunning)
+            {
+                throw new ServerStateException("Cannot register controller while the server is running.", this);
+            }
+
         }
 
         public void Dispose()
@@ -196,6 +208,11 @@ namespace StayNet
             
             Log(LogLevel.Info, "Server stopped");
         }
+
+        internal void CDisconnect(Client client)
+        {
+            ClientDisconnected?.Invoke(this, client);
+        }
         
         public List<Client> GetClients()
         {
@@ -209,7 +226,7 @@ namespace StayNet
         
         public async Task BroadcastInvoke(string method, params object[] args)
         {
-            foreach (var client in m_clients.Values)
+            foreach (var client in m_clients.Values.ToList())
             {
                 await client.InvokeAsync(method, args);
             }
