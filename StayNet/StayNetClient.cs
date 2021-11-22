@@ -133,5 +133,10 @@ namespace StayNet
             Log(LogLevel.Info, "Disconnected");
         }
         
+        public async Task InvokeAsync(String Message, params object[] args)
+        {
+            
+        }
+        
     }
 }

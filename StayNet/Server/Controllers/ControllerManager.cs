@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using StayNet.Common.Attributes;
 
 namespace StayNet.Server.Controllers
@@ -79,6 +80,16 @@ namespace StayNet.Server.Controllers
             }
             
             return true;
+        }
+        
+        internal async Task InvokeMethod(string methodId, object[] parameters)
+        {
+            if (!ControllerMethods.ContainsKey(methodId))
+                return;
+            
+            var node = ControllerMethods[methodId];
+            await (Task)node.Method.Invoke(node.Class, parameters);
+            return;
         }
         
     }
