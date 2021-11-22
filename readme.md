@@ -12,7 +12,7 @@ Simple library for TCP/IP communication between a **server** and a **client** or
 Java and C# Versions work together.
 
 ## Usage
-There is a guide in the [Wiki page](https://github.com/Stay1444/StayNet/wiki/Getting-Started), and theres a example.
+Check the [Wiki page](https://github.com/Stay1444/StayNet/wiki/Getting-Started) or the [Example](https://github.com/Stay1444/StayNet/tree/master/ExampleConsoleApp)
 
 ## Suggestions
 Feel free to create an issue suggesting something.
