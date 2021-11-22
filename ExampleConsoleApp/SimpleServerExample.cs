@@ -20,7 +20,7 @@ namespace ExampleConsoleApp
             };
             
             var server = new StayNetServer(config);
-            
+            server.RegisterController<SimpleController>();
             server.Start();
 
             server.ClientConnecting += (server, ev) =>
