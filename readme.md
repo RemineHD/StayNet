@@ -1,12 +1,15 @@
 # StayNet
 
-Simple but Library for TCP/IP communication between a **server** and a **client** or multiple **clients**.
+Simple library for TCP/IP communication between a **server** and a **client** or multiple **clients**.
+
 
 ## Features: 
  - [ ] Simple and fast TCP/IP communication between a server and a client or multiple clients.
  - [ ] Send and receive messages with JSON
  - [ ] Send raw binary data. 
  - [ ] Send files
+
+Java and C# Versions work together.
 
 ## Usage:
 ```
